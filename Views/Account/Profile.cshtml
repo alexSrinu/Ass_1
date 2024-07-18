@@ -1,0 +1,123 @@
+﻿@model Ass_1.Models.Candidate
+
+@{
+    ViewBag.Title = "Profile";
+    // Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<h2>Profile</h2>
+@using (Html.BeginForm("Profile", "Account", FormMethod.Post))
+{
+
+
+<div class="form-horizontal">
+    <h4>Update Profile</h4>
+    <hr />
+
+    @Html.HiddenFor(m => m.CandidateId)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.StateId)
+            </td>
+            <td>
+                <select name="States" id="stateDropdown">
+                    <option value="">Select State</option>
+                    @foreach (var state in ViewBag.States)
+                    {
+                        <option value="@state.StateId">@state.StateName</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.CityId)
+            </td>
+            <td>
+
+                <select name="City" id="cityDropdown">
+                    <option value="">Select City</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Mobile, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Resume, "Resume (.docx, .pdf)", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" name="resume" class="form-control" accept=".pdf,.docx" />
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Photo, "Photo (.jpeg, .png)", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file" name="photo" class="form-control" accept=".jpeg,.png" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function onChange() {
+            $('#stateDropdown').keyup(function () {
+                alert('is in')
+                debugger
+                var stateId = $(this).val();
+                if (stateId) {
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("GetCitiesByStateId", "Account")',
+                        data: { stateId: stateId},
+                        success: function (City) {
+                         /*   console.log(yes);*/
+                            $('#cityDropdown').empty();
+                            $('#cityDropdown').append($('<option>').text('Select City').attr('value', ''));
+                            $.each(City, function (i, city) {
+                                $('#cityDropdown').append($('<option>').text(city.Text).attr('value', city.Value));
+                            });
+                        }
+                    });
+                } else {
+                    debugger                        
+                  
+                    $('#cityDropdown').empty();
+                }
+           
+                onChange();
+            });
+
+    </script>
+}
+
+

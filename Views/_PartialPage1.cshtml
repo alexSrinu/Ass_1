@@ -1,0 +1,7 @@
+﻿<div class="form-group">
+    @Html.LabelFor(m => m.Mobile, new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+    </div>
+</div>
